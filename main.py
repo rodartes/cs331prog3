@@ -1,3 +1,8 @@
+# CS 331 Spring 2022
+# Programming Assignment 3
+# Team: Jane Kuffler (kufflerj@oregonstate.edu) 
+#       Rose Rodarte (rodartes@oregonstate.edu)
+
 import sys
 
 if len(sys.argv) != 3:
