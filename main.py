@@ -82,12 +82,28 @@ vocab = []
 for s in train_sent:
     for word in s:
         if word != '0' and word != '1':
-            vocab.append(stripPun(word))
-print(vocab)
-# 3. convert training and test data
+            w = stripPun(word)
+            if w not in vocab:
+                vocab.append(w)
+vocab.sort()
+#print(vocab)
+
+# 3. convert training and test data to set features
+# m = size of vocabulary
+m = len(vocab)
+# convert each sentence into a feature vector
+
 
 # 4. output data to two files
+vocab.append("classlabel")
+v_list = ' '.join(str(v) for v in vocab)
+ptrain = open("preprocessed_train.txt", "w")
+ptrain.write(v_list)
+ptrain.close()
 
+ptest = open("preprocessed_test.txt", "w")
+ptest.write(v_list)
+ptest.close()
 
 
 # naive bayes classifier
