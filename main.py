@@ -157,18 +157,18 @@ ptest.close()
 # SECOND PART - Naive Bayes Classifier
 
 #takes in the vocab, training set, and training feature vector and calculates the uniform dirichlet priors for every word (both pos and neg)
-def train(v_list, train_data, train_vector):
+def train(v_list, train_vector, dirichletPos, dirichletNeg):
     numPos = 0
     numNeg = 0
     numWords = len(v_list)
     numSents = len(train_vector[0])
-    dirichletPos = []
-    dirichletNeg = []
     
     for x in range(0, len(train_vector)):
         if train_vector[x][-1] == str(1):
+            #count number of positive reviews from training set
             numPos = numPos + 1
         else:
+            #count number of negative reviews from training set
             numNeg = numNeg + 1
 
     for word in range (0, numWords):
@@ -188,9 +188,35 @@ def train(v_list, train_data, train_vector):
             if obj[word] == 1 and obj[-1] == str(0):
                 existsN = existsN + 1
         #calculate num+1/numNeg+2 and append to dirichletNeg
-        dirichletNeg.append(round((existsN+1)/(numNeg+2), 6))
+        dirichletNeg.append((existsN+1)/(numNeg+2))
     #print(dirichletNeg[0])
 
+def test(dirichletPos, dirichletNeg, test_vector, v_list):
+    #print(test_vector[0])
+    predicted = []
+    for obj in test_vector:
+        temp = []
+        totalPos = 0
+        totalNeg = 0
+        #Get each word and idx of each word by sentence
+        for word in range (0, len(v_list)):
+            if obj[word] == str(1):
+                temp.append(v_list[word])
+                temp.append(word)
+        #calculate positive and negative dirichlet priors for all words in sentence
+        for x in range(1, len(temp), 2):
+            totalPos = totalPos + dirichletPos[x] 
+            totalNeg = totalNeg + dirichletNeg[x]
+        # if positive is higher set 1 else set 0
+        if totalPos > totalNeg:
+            predicted.append(1)
+        else:
+            predicted.append(0)
+    print(predicted)
 
 
-train(vocab, train_sent, train_vector)
+
+dirichletPos = []
+dirichletNeg = []
+train(vocab, train_vector, dirichletPos, dirichletNeg)
+test(dirichletPos, dirichletNeg, test_vector, vocab)
