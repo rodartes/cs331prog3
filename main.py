@@ -107,7 +107,7 @@ for s in train_sent:
     v = [0] * (m+1)
     for x in range(m):
         for w in s:
-            if w == vocab[x]:
+            if w.lower() == vocab[x]:
                 v[x] = 1
     v[m] = s[-1]
     train_vector.append(v)
@@ -117,7 +117,7 @@ for s in test_sent:
     v = ['0'] * (m+1)
     for x in range(m):
         for w in s:
-            if w == vocab[x]:
+            if w.lower() == vocab[x]:
                 v[x] = '1'
     v[m] = s[-1]
     test_vector.append(v)
@@ -155,3 +155,42 @@ for i in test_vector:
 ptest.close()
 
 # SECOND PART - Naive Bayes Classifier
+
+#takes in the vocab, training set, and training feature vector and calculates the uniform dirichlet priors for every word (both pos and neg)
+def train(v_list, train_data, train_vector):
+    numPos = 0
+    numNeg = 0
+    numWords = len(v_list)
+    numSents = len(train_vector[0])
+    dirichletPos = []
+    dirichletNeg = []
+    
+    for x in range(0, len(train_vector)):
+        if train_vector[x][-1] == str(1):
+            numPos = numPos + 1
+        else:
+            numNeg = numNeg + 1
+
+    for word in range (0, numWords):
+        existsP = 0
+        for obj in train_vector:
+            #Count num reviews with word and positive class label
+            if obj[word] == 1 and obj[-1] == str(1):
+                existsP = existsP + 1
+        #calculate num+1/numPos+2 and append to dirichletPos
+        dirichletPos.append(round((existsP+1)/(numPos+2), 6))
+    #print(dirichletPos[0])
+
+    for word in range (0, numWords):
+        existsN = 0
+        for obj in train_vector:
+            #Count num reviews with word and negative class label
+            if obj[word] == 1 and obj[-1] == str(0):
+                existsN = existsN + 1
+        #calculate num+1/numNeg+2 and append to dirichletNeg
+        dirichletNeg.append(round((existsN+1)/(numNeg+2), 6))
+    #print(dirichletNeg[0])
+
+
+
+train(vocab, train_sent, train_vector)
