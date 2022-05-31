@@ -213,10 +213,21 @@ def test(dirichletPos, dirichletNeg, test_vector, v_list):
         else:
             predicted.append(0)
     print(predicted)
+    return predicted
 
+def accuracy (predicted, test_vector):
+    count = 0
+    result = 0
+    for obj in test_vector:
+        if str(predicted[count]) == str(obj[-1]):
+            result = result + 1
+        count = count + 1
 
+    percentRight = (result / count)*100
+    print(percentRight)
 
 dirichletPos = []
 dirichletNeg = []
 train(vocab, train_vector, dirichletPos, dirichletNeg)
-test(dirichletPos, dirichletNeg, test_vector, vocab)
+result = test(dirichletPos, dirichletNeg, test_vector, vocab)
+accuracy(result, test_vector)
