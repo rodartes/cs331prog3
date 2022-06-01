@@ -1,0 +1,2 @@
+Training and Testing on Training Set Accuracy: 49.1% 
+Training and Testing on Different Sets Accuracy: 51.11% 

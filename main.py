@@ -224,10 +224,21 @@ def accuracy (predicted, test_vector):
         count = count + 1
 
     percentRight = (result / count)*100
-    print(percentRight)
+    return percentRight
 
+res = open("results.txt", "w")
+# same training and test data from trainingSet.txt
+dirichletPos = []
+dirichletNeg = []
+train(vocab, train_vector, dirichletPos, dirichletNeg)
+result = test(dirichletPos, dirichletNeg, train_vector, vocab)
+a = round(accuracy(result, train_vector), 2)
+res.write("Training and Testing on Training Set Accuracy: " + str(a) + "% \n")
+# unique training and test data from trainingSet.txt and testSet.txt
 dirichletPos = []
 dirichletNeg = []
 train(vocab, train_vector, dirichletPos, dirichletNeg)
 result = test(dirichletPos, dirichletNeg, test_vector, vocab)
-accuracy(result, test_vector)
+a = round(accuracy(result, test_vector), 2)
+res.write("Training and Testing on Different Sets Accuracy: " + str(a) + "% \n")
+res.close()
